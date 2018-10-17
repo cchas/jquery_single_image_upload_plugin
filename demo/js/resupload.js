@@ -34,7 +34,7 @@
                             '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
                         '</div>',
 
-                        '<span id="' , id , '_message" class="success"></span>',
+                        '<span id="' , id , '_message" class="status"></span>',
 
                       '</div>',
 
@@ -117,20 +117,27 @@
 
             targetObj.find('a.clear_image').hide();
 
+            clear_message( targetObj );
+
         }
 
         function set_template( targetObj, settings ){
             
+            console.log(settings.url_default_image, 'default_image');
+
             var src = '';
-            if( settings.url_default_image && settings.url_default_image.indexOf('//') > -1 ){
+
+            if( settings.url_default_image.length > 4 && settings.url_default_image.indexOf('//') > -1 ){
                 src = settings.url_default_image;
-            }else{
-                targetObj.find('a.clear_image').hide();
             }
 
             var template = settings.template_html(settings.id, src);
 
             targetObj.html( template );
+
+            if( settings.url_default_image == '' || settings.url_default_image.length < 4 ){
+                targetObj.find('a.clear_image').hide();
+            }
 
         };
 
@@ -159,6 +166,8 @@
                 objImg.attr('src', file);
                 update_message( id, 'success', lang.upload_success );
                 
+                $('#' + id ).closest('div.thumbnail_image').find('a.clear_image').show();
+
             }, 2000);
 
         } // end update_thumbnail
@@ -166,7 +175,7 @@
         function update_message( id, status_class, message ){
 
             $('#' + id ).closest('div.thumbnail_image')
-                        .find('span')
+                        .find('span.status')
                         .removeClass( 'info success danger warning error' )
                         .addClass( status_class )
                         .text( message || '...' );
@@ -177,8 +186,7 @@
 
             targetObj.closest('span.status')
                     .text('')
-                    .removeClass('success')
-                    .removeClass('error');
+                    .removeClass('success error danger info warning');
 
         }
 
@@ -234,8 +242,6 @@
                         filename = obj_json.nombre_archivo;    
                         
                         $('#' + id ).attr('data-filename', filename);
-                        $('#' + id ).closest('div.thumbnail_image').find('a.clear_image').show();
-
                         update_thumbnail( id, file );
                         
                     }else{
