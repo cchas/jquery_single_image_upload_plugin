@@ -45,6 +45,8 @@
 
         function set_template( targetObj, settings ){
             
+            console.log(settings, 'settings');
+
             var template = '',
                 id = targetObj.attr('id') || '';
 
@@ -58,15 +60,15 @@
             
             }
 
-            if( settings.url_default_image.length > 4 && settings.url_default_image.indexOf('//') > -1 ){
-                settings.src = settings.url_default_image;
+            if( settings.src.length > 4 && settings.src.indexOf('//') > -1 ){
+                settings.src = settings.src;
             }
 
             template = settings.template_html( targetObj, settings );
 
             targetObj.html( template );
 
-            if( settings.url_default_image == '' || settings.url_default_image.length < 4 ){
+            if( settings.src == '' || settings.src.length < 4 ){
                 
                 hide_clear_button( targetObj );
                 
@@ -223,7 +225,7 @@
             id           : '',
             url_spinner  : 'img/spinner.gif',
             url_upload   : 'upload.php',
-            url_default_image: '',
+            src: '',
             field_name : 'upl',
             data: {},
             lang: {
@@ -238,6 +240,7 @@
             border_width: 10,
             border_color: '#000000',
             button_color: '#ff0000',
+            background_color: 'transparent',
 
             template_html: function( targetObj, settings ){
 
@@ -249,6 +252,7 @@
                 style = ' style="';
                 style += 'border-width: ' + settings.border_width + 'px;';
                 style += 'border-color: ' + settings.border_color.trim() + ';';
+                style += 'background-color: ' + settings.background_color.trim() + ';';
                 style += '" ';
 
                 style_button = ' style="';

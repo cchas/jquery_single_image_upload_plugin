@@ -22,7 +22,7 @@
 
             .my_image_wrapper{
                 width: 100%;
-                max-width: 1120px;
+                max-width: 960px;
             }
 
         </style>
@@ -30,9 +30,29 @@
     </head>
 
     <body>
+        
+        <h4>DIV1.- simple instantiation</h4>
+        <div class="resupload" id="my_image1"></div>
+        <br><br>
 
-        <div class="resupload" id="my_image"></div>
-		
+        <h4>DIV2.- simple instantiation</h4>
+        <div class="resupload" id="my_image2"></div>
+        <br><br>
+        
+        <h4>DIV3.- With initializing with an image</h4>
+        <div id="my_image3"></div>
+		<br><br>
+        
+        <h4>DIV4.- With data to be sent with the form</h4>
+        <div id="my_image4"></div>
+        <br><br>
+        
+        <h4>DIV5.- With styling options</h4>
+        <div id="my_image5"></div>
+        <br><br>
+
+
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="js/resupload.js"></script>
         
@@ -40,18 +60,27 @@
             
             $(function(){
 
+                // Multiple instantiation (divs 1 and 2)
                 $('.resupload').resupload();
 
-                /*
-                $('.resupload').resupload({
-                    url_spinner  : 'img/spinner.gif',
-                    url_upload   : 'upload.php',
-                    url_default_image: '',
+
+                $('#my_image3').resupload({
+                    src: 'img/default.png'
+                });
+
+                $('#my_image4').resupload({
                     data: {
                         data_field_name: 'data_field_value'
                     }
                 });
-                */
+                
+                $('#my_image5').resupload({
+                    border_width: 15,
+                    border_color: '#ccc',
+                    button_color: '#155724',
+                    background_color: '#eee'
+                });
+
             });
 
         </script>

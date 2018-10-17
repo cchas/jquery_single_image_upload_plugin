@@ -31,6 +31,7 @@ dwsync.xml
 publish
 .idea
 zzz_trabajo
+uploads
 
 # build script local files
 build/buildinfo.properties

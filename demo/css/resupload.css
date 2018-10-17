@@ -55,6 +55,8 @@
     left: 15px;
     bottom: 10px;
     display: block;
+    background: #fff;
+    padding: 3px 10px 3px 3px;
  }
 
 .thumbnail_image span.success{
