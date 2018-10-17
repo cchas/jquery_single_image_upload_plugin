@@ -20,7 +20,7 @@
                 text-align: center;
             }
 
-            .image_upload_wrapper{
+            .my_image_wrapper{
                 width: 100%;
                 max-width: 1120px;
             }
@@ -30,7 +30,7 @@
     </head>
 
     <body>
-        
+
         <div class="res_upload" data-id="my_image"></div>
 		
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -43,8 +43,8 @@
                 $('.res_upload').resupload({
                     id: 'my_image',
                     url_spinner  : 'img/spinner.gif',
-                    url_upload   : 'api/upload.php',
-                    url_default_image: 'img/default.png',
+                    url_upload   : 'upload.php',
+                    url_default_image: '',
                     data: {
                         data_field_name: 'data_field_value'
                     }

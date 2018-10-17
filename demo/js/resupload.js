@@ -4,31 +4,35 @@
 
         var settings = $.extend({
             id           : '',
-            url_spinner  : 'http://localhost/sanjuan2/img/spinner.gif',
-            url_upload   : '',
+
+            url_spinner  : 'img/spinner.gif',
+            url_upload   : 'upload.php',
             url_default_image: '',
+            field_name : 'upl',
             data: {},
             lang: {
-                'error_inicio': 'Error al iniciar el componente. Consulte con soporte técnico.'
+                'init_error': 'Error when initializing plugin',
+                'upload_file_error' : 'Error when uploading file: ',
+                'network_error' : 'Error when connecting to server'
             }
 
         }, options);
 
-        var esto = this;
+        var esto = this,
+            lang = settings.lang;
 
         return this.each( function() {
             
             var targetObj = $(this);
 
-            establecer_template( targetObj, settings);
+            set_template( targetObj, settings);
 
             if( 
                 settings.url_upload == '' || 
                 settings.id == '' 
             ){
                 
-                console.log('No existen parámetros obligatorios');
-                targetObj.html( alert_error('error_inicio') );
+                targetObj.html( alert_error('init_error') );
                 return false;
             
             }
@@ -44,15 +48,15 @@
                 var file = URL.createObjectURL( objInputFile.get(0).files[0] ),
                       id = settings.id;
 
-                procesar_subir_archivo( file, id );
+                run_file_upload( file, id, settings.field_name );
 
             });
 
             /* evento eliminar enlace */
-            var enlace_eliminar_imagen = targetObj.find('a.eliminar_imagen');
-            enlace_eliminar_imagen.click(function(e){ 
+            var enlace_clear_image = targetObj.find('a.clear_image');
+            enlace_clear_image.click(function(e){ 
                   
-                eliminar_imagen( e, targetObj );
+                clear_image( e, targetObj );
 
             });
 
@@ -76,29 +80,29 @@
         
         }
 
-        function eliminar_imagen( e, targetObj ){
+        function clear_image( e, targetObj ){
 
             e.preventDefault();
 
             targetObj.find('div.thumbnail_image img').attr('src', '');
             targetObj.find('div.thumbnail_image input[type=file]').attr('data-filename', '');
 
-            targetObj.find('a.eliminar_imagen').hide();
+            targetObj.find('a.clear_image').hide();
 
         }
 
-        function establecer_template( targetObj, settings ){
+        function set_template( targetObj, settings ){
             
             var src = '';
             if( settings.url_default_image && settings.url_default_image.indexOf('//') > -1 ){
                 src = settings.url_default_image;
             }else{
-                targetObj.find('a.eliminar_imagen').hide();
+                targetObj.find('a.clear_image').hide();
             }
 
             var template = [
 
-                '<div class="caja_' , settings.id , '">',
+                '<div class="' , settings.id , '_wrapper">',
 
                   '<div class="thumbnail_image vertical-center">',
                   
@@ -106,7 +110,7 @@
                     '<img src="' , src , '" id="thumbnail_' , settings.id , '" />',
                     
                     '<div class="botones_thumbnail">',
-                        '<a href="#" class="eliminar_imagen"><i class="fa fa-trash"></i></a>',
+                        '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
                     '</div>',
                   '</div>',
 
@@ -120,7 +124,7 @@
 
         function poner_cargador( objImg ){
 
-            limpiar_thumbnail( objImg );
+            clear_thumbnail( objImg );
 
             window.setTimeout(function(){
 
@@ -132,7 +136,7 @@
 
         }
 
-        function actualizar_thumbnail( id, file ){
+        function update_thumbnail( id, file ){
 
             var objImg = $('#thumbnail_' + id);
 
@@ -144,10 +148,10 @@
                 
             }, 2000);
 
-        } // fin actualizar_thumbnail
+        } // fin update_thumbnail
 
 
-        function limpiar_thumbnail( targetObj ){
+        function clear_thumbnail( targetObj ){
 
             targetObj.attr( 'src', '');
             
@@ -155,7 +159,7 @@
 
         }
 
-        function procesar_subir_archivo( file, id ){
+        function run_file_upload( file, id, field_name ){
 
             var fd        = new FormData(),
                 targetObj = $('#thumbnail_' + id ),
@@ -164,9 +168,9 @@
 
             var fsize = blobFile.size;
 
-            limpiar_thumbnail( targetObj );
+            clear_thumbnail( targetObj );
 
-            fd.append('upl', blobFile, filename );
+            fd.append(field_name, blobFile, filename );
 
             $.each( settings.data, function(index, value){
                 
@@ -193,23 +197,21 @@
 
                     if( obj_json.status == 'ok' || obj_json.status == 'success' ){
 
-                        console.log(obj_json, 'obj_json');
-
                         filename = obj_json.nombre_archivo;    
                         
-                        console.log(filename, 'filename');
-
                         $('#' + id ).attr('data-filename', filename);
-                        $('#' + id ).closest('div.thumbnail_image').find('a.eliminar_imagen').show();
+                        $('#' + id ).closest('div.thumbnail_image').find('a.clear_image').show();
 
-                        actualizar_thumbnail( id, file );
+                        update_thumbnail( id, file );
                         
                     }else{
 
-                        // limpiar_thumbnail( targetObj );
-                        $('#' + id ).closest('div.thumbnail_image').addClass('error').show();
+                        // clear_thumbnail( targetObj );
+                        $('#' + id ).closest('div.thumbnail_image')
+                                    .addClass('error')
+                                    .show();
 
-                        console.log('Error al subir el archivo: ' + obj_json.error );
+                        console.log( lang.upload_file_error + obj_json.error );
 
                     }
 
@@ -219,11 +221,11 @@
 
 
             resp.fail(function() {
-                console.log('Falló la conexión con el servidor');
+                console.log( lang.network_error );
                 return false;
             });
 
-        } // fin procesar_subir_archivo
+        } // fin run_file_upload
 
 
     } // fin plugin
