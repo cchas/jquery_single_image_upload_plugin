@@ -1,8 +1,18 @@
 <?php
 	
-	$field_name = 'upl'; // the field_name option when initializing plugin
-	$max_file_size = 1000000; // the maximum file size allowed
-	$upload_folder = __DIR__ . '/uploads/';
+	/***********************************************************************************
+		
+		** WARNING **
+
+	  	THIS IS ONLY AN EXAMPLE SCRIPT. THE SECURITY IS VERY LOW. USE YOUR OWN SCRIPT.
+
+	**********************************************************************************/
+
+
+	$field_name = 'upl'; // must be the same than field_name option when initializing plugin
+	$max_file_size = 1000000;
+	$upload_folder = __DIR__ . '/uploads/'; 
+
 	$uploaded_file_name      = $_FILES[ $field_name ]['name'];
 	$uploaded_file_temp_name = $_FILES[ $field_name ]['tmp_name'];
 	$uploaded_file_size      = $_FILES[ $field_name ]['size'];
@@ -25,7 +35,6 @@
 			exit;
 
 		}
-
 
 		// FILE UPLOADING
 		$result_move = move_uploaded_file( $uploaded_file_temp_name, $upload_folder . $uploaded_file_name );

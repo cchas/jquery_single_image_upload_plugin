@@ -14,6 +14,27 @@
                 'init_error': 'Error when initializing plugin',
                 'upload_file_error' : 'Error when uploading file: ',
                 'network_error' : 'Error when connecting to server'
+            },
+            template_html: function(id, src){
+
+                return [
+
+                    '<div class="' , id , '_wrapper">',
+
+                      '<div class="thumbnail_image vertical-center">',
+                      
+                        '<input type="file" accept="image/*" id="' , id , '" data-filename="" />',
+                        '<img src="' , src , '" id="thumbnail_' , id , '" />',
+                        
+                        '<div class="botones_thumbnail">',
+                            '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
+                        '</div>',
+                      '</div>',
+
+                    '</div>',
+
+                ].join('');
+
             }
 
         }, options);
@@ -52,8 +73,8 @@
 
             });
 
-            /* evento eliminar enlace */
             var enlace_clear_image = targetObj.find('a.clear_image');
+            
             enlace_clear_image.click(function(e){ 
                   
                 clear_image( e, targetObj );
@@ -73,7 +94,7 @@
                     '<a href="#" class="close" data-dismiss="alert" aria-label="close" tabindex="9999">×</a>',
                     '<div class="alert-content">',
                         '<i class="fa fa-exclamation-circle fa-2x"></i> &nbsp;',
-                        settings.lang[ errorId ],
+                        lang.errorId,
                     '</div>',
                 '</div>'
             ].join('');
@@ -100,23 +121,7 @@
                 targetObj.find('a.clear_image').hide();
             }
 
-            var template = [
-
-                '<div class="' , settings.id , '_wrapper">',
-
-                  '<div class="thumbnail_image vertical-center">',
-                  
-                    '<input type="file" accept="image/*" id="' , settings.id , '" data-filename="" />',
-                    '<img src="' , src , '" id="thumbnail_' , settings.id , '" />',
-                    
-                    '<div class="botones_thumbnail">',
-                        '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
-                    '</div>',
-                  '</div>',
-
-                '</div>',
-
-            ].join('');
+            var template = settings.template_html(settings.id, src);
 
             targetObj.html( template );
 
