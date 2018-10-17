@@ -197,6 +197,7 @@
                     }else{
 
                         show_error_icon( targetObj );
+                        hide_clear_button( targetObj );
 
                         update_message( targetObj, 'error', lang.upload_error + ': ' + obj_json.error );
                         console.log( lang.upload_file_error + obj_json.error );
@@ -244,9 +245,9 @@
 
             template_html: function( targetObj, settings ){
 
-                var id = targetObj.attr('id'),
-                    src = settings.src,
-                    style = '',
+                var id           = targetObj.attr('id'),
+                    src          = settings.src,
+                    style        = '',
                     style_button = '';
 
                 style = ' style="';
