@@ -153,7 +153,7 @@
                 
             }, 2000);
 
-        } // fin update_thumbnail
+        } // end update_thumbnail
 
 
         function clear_thumbnail( targetObj ){
@@ -226,14 +226,16 @@
 
 
             resp.fail(function() {
+
                 console.log( lang.network_error );
                 return false;
+            
             });
 
-        } // fin run_file_upload
+        } // end run_file_upload
 
 
-    } // fin plugin
+    } // end plugin
 
 
 }(jQuery));
