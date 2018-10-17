@@ -8,6 +8,7 @@
 
 	**********************************************************************************/
 
+	error_reporting(0);
 
 	$field_name = 'upl'; // must be the same than field_name option when initializing plugin
 	$max_file_size = 1000000;
@@ -17,9 +18,10 @@
 	$uploaded_file_temp_name = $_FILES[ $field_name ]['tmp_name'];
 	$uploaded_file_size      = $_FILES[ $field_name ]['size'];
 
+	
 	if( 
-		isset($_FILES['upl']) && 
-		$_FILES['upl']['error'] == 0
+		isset($_FILES[ $field_name ]) && 
+		$_FILES[ $field_name ]['error'] == 0
 	){
 
 		// VALIDATION
@@ -56,7 +58,7 @@
 	echo json_encode(
 		array(
 			'status' => 'ko',
-			'error'  => 'Error when uploading the file'
+			'error'  => 'Unknown error'
 
 		)
 	);

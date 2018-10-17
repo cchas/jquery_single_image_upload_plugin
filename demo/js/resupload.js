@@ -80,9 +80,9 @@
 
             });
 
-            var enlace_clear_image = targetObj.find('a.clear_image');
+            var link_clear_image = targetObj.find('a.clear_image');
             
-            enlace_clear_image.click(function(e){ 
+            link_clear_image.click(function(e){ 
                   
                 clear_image( e, targetObj );
 
@@ -90,9 +90,26 @@
 
             return this;
 
-
         });
 
+
+        function update_data_filename(targetObj, filename){
+
+            targetObj.find('input[type=file]').attr('data-filename', filename);
+        
+        }
+
+        function show_clear_button( targetObj ){
+
+            targetObj.find('a.clear_image').show();
+        
+        }
+
+        function hide_clear_button( targetObj ){
+
+            targetObj.find('a.clear_image').hide();
+        
+        }
 
         function alert_error( errorId ){
             
@@ -113,18 +130,15 @@
             e.preventDefault();
 
             targetObj.find('div.thumbnail_image img').attr('src', '');
-            targetObj.find('div.thumbnail_image input[type=file]').attr('data-filename', '');
-
-            targetObj.find('a.clear_image').hide();
-
+            
+            update_data_filename(targetObj, '');
+            hide_clear_button(targetObj);
             clear_message( targetObj );
 
         }
 
         function set_template( targetObj, settings ){
             
-            console.log(settings.url_default_image, 'default_image');
-
             var src = '';
 
             if( settings.url_default_image.length > 4 && settings.url_default_image.indexOf('//') > -1 ){
@@ -136,7 +150,9 @@
             targetObj.html( template );
 
             if( settings.url_default_image == '' || settings.url_default_image.length < 4 ){
-                targetObj.find('a.clear_image').hide();
+                
+                hide_clear_button( targetObj );
+                
             }
 
         };
@@ -166,7 +182,8 @@
                 objImg.attr('src', file);
                 update_message( id, 'success', lang.upload_success );
                 
-                $('#' + id ).closest('div.thumbnail_image').find('a.clear_image').show();
+                var targetObj = $('#' + id ).closest('div.thumbnail_image');
+                show_clear_button(targetObj);
 
             }, 2000);
 
@@ -186,7 +203,7 @@
 
             targetObj.find('span.status')
                     .text('')
-                    .removeClass('success error danger info warning');
+                    .removeClass('info success danger warning error');
 
         }
 
@@ -197,6 +214,63 @@
             targetObj.closest('div.thumbnail_image').removeClass('error');
 
             clear_message( targetObj );
+
+        }
+
+        function process_run_file_upload( id, file, fd ){
+
+            var resp = $.ajax({
+                url: settings.url_upload,
+                type: 'POST',
+                data: fd,
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+
+            resp.done(function(obj_json) {
+
+                if( typeof obj_json == 'string' ){
+                  obj_json = $.parseJSON( obj_json );
+                }
+
+                if (obj_json !== null) {
+
+                    if( obj_json.status == 'ok' || obj_json.status == 'success' ){
+
+                        filename = obj_json.nombre_archivo;    
+                        
+                        // $('#' + id ).attr('data-filename', filename);
+
+                        var targetObj = $('#thumbnail_' + id );
+                        
+                        update_data_filename(targetObj, filename);
+                        update_thumbnail( id, file );
+                        
+                    }else{
+
+                        $('#' + id ).closest('div.thumbnail_image')
+                                    .addClass('error')
+                                    .show();
+
+                        update_message( id, 'error', lang.upload_error + ': ' + obj_json.error );
+                        console.log( lang.upload_file_error + obj_json.error );
+
+                    }
+
+                }
+
+            });
+
+
+            resp.fail(function() {
+
+                console.log( lang.network_error );
+                return false;
+            
+            });
+
+            return resp;
 
         }
 
@@ -220,54 +294,7 @@
 
             });
 
-            var resp = $.ajax({
-                url: settings.url_upload,
-                type: 'POST',
-                data: fd,
-                cache: false,
-                contentType: false,
-                processData: false
-            });
-
-            resp.done(function(obj_json) {
-
-                if( typeof obj_json == 'string' ){
-                  obj_json = $.parseJSON( obj_json );
-                }
-
-                if (obj_json !== null) {
-
-                    if( obj_json.status == 'ok' || obj_json.status == 'success' ){
-
-                        filename = obj_json.nombre_archivo;    
-                        
-                        $('#' + id ).attr('data-filename', filename);
-                        update_thumbnail( id, file );
-                        
-                    }else{
-
-                        // clear_thumbnail( targetObj );
-                        $('#' + id ).closest('div.thumbnail_image')
-                                    .addClass('error')
-                                    .show();
-
-                        update_message( id, 'error', lang.upload_error );
-
-                        console.log( lang.upload_file_error + obj_json.error );
-
-                    }
-
-                }
-
-            });
-
-
-            resp.fail(function() {
-
-                console.log( lang.network_error );
-                return false;
-            
-            });
+            process_run_file_upload( id, file, fd );
 
         } // end run_file_upload
 
