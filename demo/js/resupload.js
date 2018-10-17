@@ -2,42 +2,38 @@
 
     $.fn.resupload = function( options ) {
 
+        function alert_error( error_message ){
 
-        function update_data_filename(targetObj, filename){
-
-            targetObj.find('input[type=file]').attr('data-filename', filename);
-        
-        }
-
-        function show_clear_button( targetObj ){
-
-            targetObj.find('a.clear_image').show();
-        
-        }
-
-        function hide_clear_button( targetObj ){
-
-            targetObj.find('a.clear_image').hide();
-        
-        }
-
-        function alert_error( errorId ){
-            
             return [
-                '<div class="alert alert-danger">',
-                    '<a href="#" class="close" data-dismiss="alert" aria-label="close" tabindex="9999">×</a>',
-                    '<div class="alert-content">',
-                        '<i class="fa fa-exclamation-circle fa-2x"></i> &nbsp;',
-                        lang.errorId,
-                    '</div>',
-                '</div>'
+                '<div class="error_wrapper">',
+
+                      '<div class="thumbnail_image vertical-center">',
+                      
+                        '<p>',
+                            '<span class="error">',
+                                error_message,
+                            '</span>',
+                        '</p>',
+                      '</div>',
+
+                    '</div>'
             ].join('');
         
         }
 
-        function clear_image( e, targetObj ){
+        function update_data_filename(targetObj, filename){
+            targetObj.find('input[type=file]').attr('data-filename', filename);        
+        }
 
-            e.preventDefault();
+        function show_clear_button( targetObj ){
+            targetObj.find('a.clear_image').show();
+        }
+
+        function hide_clear_button( targetObj ){
+            targetObj.find('a.clear_image').hide();
+        }
+
+        function clear_image( targetObj ){
 
             targetObj.find('div.thumbnail_image img').attr('src', '');
             
@@ -51,6 +47,16 @@
             
             var src = '',
                 template = '';
+
+            if( 
+                settings.url_upload == '' || 
+                settings.id == '' 
+            ){
+
+                targetObj.html( alert_error( lang.init_error ) );
+                return false;
+            
+            }
 
             if( settings.url_default_image.length > 4 && settings.url_default_image.indexOf('//') > -1 ){
                 src = settings.url_default_image;
@@ -66,6 +72,8 @@
                 
             }
 
+            return true;
+
         };
 
         function show_spinner( targetObj ){
@@ -80,6 +88,14 @@
                         .show();
 
             }, 500);
+
+        }
+
+        function show_error_icon( targetObj ){
+
+            targetObj
+                .addClass('error')
+                .show();
 
         }
 
@@ -99,22 +115,6 @@
 
         } // end update_thumbnail
 
-        function update_message( targetObj, status_class, message ){
-
-            targetObj.find('span.status')
-                     .removeClass( 'info success danger warning error' )
-                     .addClass( status_class )
-                     .text( message || '...' );
-            
-        }
-
-        function clear_message( targetObj ){
-
-            targetObj.find('span.status')
-                    .text('')
-                    .removeClass('info success danger warning error');
-
-        }
 
         function clear_thumbnail( targetObj ){
 
@@ -126,31 +126,44 @@
 
         }
 
-        function show_error_icon( targetObj ){
 
-            targetObj
-                .addClass('error')
-                .show();
+        function update_message( targetObj, status_class, message ){
+
+            targetObj.find('span.status')
+                     .removeClass( 'info success danger warning error' )
+                     .addClass( status_class )
+                     .html( message || '...' );
+            
+        }
+
+        function clear_message( targetObj ){
+
+            targetObj.find('span.status')
+                    .html('')
+                    .removeClass('info success danger warning error');
 
         }
 
-        function run_file_upload( targetObj, file, id, field_name ){
 
-            var fd        = new FormData(),
-                blobFile  = targetObj.find('input[type="file"]').get(0).files[0],
-                filename  = id + '.jpg';
+        
+
+        function run_file_upload( targetObj, file, settings ){
+
+            var fd         = new FormData(),
+                blobFile   = targetObj.find('input[type="file"]').get(0).files[0],
+                filename   = id + '.jpg',
+                id         = settings.id, 
+                field_name = settings.field_name;
 
             var fsize = blobFile.size;
 
             clear_thumbnail( targetObj );
             update_message( targetObj, 'info', lang.upload_processing );
 
+            // add data to be submitted
             fd.append(field_name, blobFile, filename );
-
             $.each( settings.data, function(index, value){
-                
                 fd.append( index, value );
-
             });
 
             process_run_file_upload( targetObj, file, fd );
@@ -220,11 +233,11 @@
             data: {},
             lang: {
                 'init_error'        : 'Error when initializing plugin',
-                'upload_file_error' : 'Error when uploading file: ',
-                'network_error'     : 'Error when connecting to server',
-                'upload_success'    : 'File uploaded successfully',
+                'upload_file_error' : '<i class="fa fa-times-circle"></i> Error when uploading file: ',
+                'network_error'     : '<i class="fa fa-times-circle"></i> Error when connecting to server',
+                'upload_success'    : '<i class="fa fa-check-circle"></i> File uploaded successfully',
                 'upload_processing' : 'Processing file...',
-                'upload_error'      : 'Error when uploading'
+                'upload_error'      : '<i class="fa fa-times-circle"></i> Error when uploading'
             },
 
             template_html: function(id, src){
@@ -261,36 +274,29 @@
             
             var targetObj = $(this);
 
-            set_template( targetObj, settings);
-
-            if( 
-                settings.url_upload == '' || 
-                settings.id == '' 
-            ){
-                
-                targetObj.html( alert_error('init_error') );
+            if( !set_template( targetObj, settings) ){
                 return false;
-            
             }
 
-            var objInputFile = targetObj.find('input[type="file"]');
+            var objInputFile     = targetObj.find('input[type="file"]'),
+                link_clear_image = targetObj.find('a.clear_image');
 
-            objInputFile.change(function(e){ 
+            objInputFile.on('change', function(e){ 
 
                 e.preventDefault();
-                  
+
                 var file = URL.createObjectURL( objInputFile.get(0).files[0] ),
                       id = settings.id;
 
-                run_file_upload( targetObj, file, id, settings.field_name );
+                run_file_upload( targetObj, file, settings );
 
             });
 
-            var link_clear_image = targetObj.find('a.clear_image');
-            
-            link_clear_image.click(function(e){ 
-                  
-                clear_image( e, targetObj );
+            link_clear_image.on('click', function(e){ 
+                
+                e.preventDefault();
+
+                clear_image( targetObj );
 
             });
 
