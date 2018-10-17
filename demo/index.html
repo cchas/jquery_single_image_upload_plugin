@@ -6,18 +6,54 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Jquery simple image upload plubin</title>
+        <title>Jquery simple image upload plugin</title>
 
         <!-- CSS -->
-        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/resupload.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		
+        <meta http-equiv="Cache-Control" content="no-store" />
+
+        <style>
+            
+            body{
+                text-align: center;
+            }
+
+            .image_upload_wrapper{
+                width: 100%;
+                max-width: 1120px;
+            }
+
+        </style>
+
     </head>
 
     <body>
-
-		This is a demo
-        <script src="assets/js/jquery-1.11.1.min.js"></script>
         
+        <div class="res_upload" data-id="my_image"></div>
+		
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="js/resupload.js"></script>
+        
+        <script>
+            
+            $(function(){
+
+                $('.res_upload').resupload({
+                    id: 'my_image',
+                    url_spinner  : 'img/spinner.gif',
+                    url_upload   : 'api/upload.php',
+                    url_default_image: 'img/default.png',
+                    data: {
+                        data_field_name: 'data_field_value'
+                    }
+                });
+
+            });
+
+        </script>
+
     </body>
 
 </html>

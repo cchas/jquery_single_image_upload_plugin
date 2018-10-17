@@ -1,0 +1,94 @@
+/* Loading Spinner */
+.spinner{position:absolute;top:50%;left:50%;text-align:center}.spinner > div{width:18px;height:18px;background-color:#5bc0de;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.spinner .bounce1{-webkit-animation-delay:-.32s;animation-delay:-.32s}.spinner .bounce2{-webkit-animation-delay:-.16s;animation-delay:-.16s}@-webkit-keyframes bouncedelay{0%,80%,100%{-webkit-transform:scale(0.0)}40%{-webkit-transform:scale(1.0)}}@keyframes bouncedelay{0%,80%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}40%{transform:scale(1.0);-webkit-transform:scale(1.0)}}
+
+
+.thumbnail_image{
+  border: 3px dashed #00b1f1;
+  padding: 5px;
+  position: relative;
+  width: 100%;
+  text-align: center;
+  min-height: 300px;
+  max-height: 360px;
+  height: 100%;
+  background: none;
+  min-height: 300px;
+}
+
+.thumbnail_image img{
+  max-width: 100%;
+  max-height: 300px;
+}
+
+.thumbnail_image input[type="file"]{
+    opacity: 0;
+    width: 100%;
+    height: 300px;
+    position: absolute;
+    z-index: 20000;
+}
+
+.thumbnail_image input[type="file"]:hover{
+  cursor: pointer;
+}
+
+
+.thumbnail_image:after {
+    content: "\f0ee";
+    font-family: FontAwesome;
+    position: absolute;
+    width: 100%;
+    font-size: 48px;
+    color: #00b1f1;
+    z-index: 0;
+    opacity: 0.5;
+    cursor:pointer;
+ }
+
+ .thumbnail_image.error:after {
+    content: "\f06a";
+    font-family: FontAwesome;
+    color: red;
+    opacity: 1;
+ }
+
+ .thumbnail_image a.delete_image{
+  display: none;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  font-size: 24px;
+  z-index: 21000;
+  padding: 10px 15px;
+  border-radius: 50px;
+  background: #00b1f1;
+  color: #fff;
+  border: 2px solid #00b1f1;
+ }
+
+ .thumbnail_image a.delete_image:hover{
+  background: #fff;
+  color: #00b1f1;
+ }
+
+.vertical-center {
+  min-height: 100%; 
+  min-height: 30vh;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex; 
+  -webkit-box-align : center;
+  -webkit-align-items : center;
+  -moz-box-align : center;
+  -ms-flex-align : center;
+  align-items : center;
+  width: 100%;
+  -webkit-box-pack : center;
+  -moz-box-pack : center;
+  -ms-flex-pack : center;
+  -webkit-justify-content : center;
+  justify-content : center;
+}
+
