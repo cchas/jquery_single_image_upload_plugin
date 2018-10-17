@@ -45,8 +45,6 @@
 
         function set_template( targetObj, settings ){
             
-            console.log(settings, 'settings');
-
             var template = '',
                 id = targetObj.attr('id') || '';
 
