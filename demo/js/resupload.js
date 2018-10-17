@@ -46,11 +46,12 @@
         function set_template( targetObj, settings ){
             
             var src = '',
-                template = '';
+                template = '',
+                id = targetObj.attr('id') || '';
 
             if( 
                 settings.url_upload == '' || 
-                settings.id == '' 
+                id == '' 
             ){
 
                 targetObj.html( alert_error( lang.init_error ) );
@@ -62,7 +63,7 @@
                 src = settings.url_default_image;
             }
 
-            template = settings.template_html(settings.id, src);
+            template = settings.template_html( id, src);
 
             targetObj.html( template );
 

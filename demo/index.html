@@ -31,7 +31,7 @@
 
     <body>
 
-        <div class="res_upload" data-id="my_image"></div>
+        <div class="resupload" id="my_image"></div>
 		
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="js/resupload.js"></script>
@@ -40,8 +40,10 @@
             
             $(function(){
 
-                $('.res_upload').resupload({
-                    id: 'my_image',
+                $('.resupload').resupload();
+
+                /*
+                $('.resupload').resupload({
                     url_spinner  : 'img/spinner.gif',
                     url_upload   : 'upload.php',
                     url_default_image: '',
@@ -49,7 +51,7 @@
                         data_field_name: 'data_field_value'
                     }
                 });
-
+                */
             });
 
         </script>
