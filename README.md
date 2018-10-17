@@ -12,15 +12,15 @@ This is a very simple plugin that allows to upload an image with preview.
 
 # Quick and dirty initialization:
 	
-	1.- Link to the resupload.css in the head of your html, and to the resupload.js file AFTER linking to jquery.
+1. Link to the resupload.css in the head of your html, and to the resupload.js file AFTER linking to jquery.
 
-	2.- Put in your html a div with class "resupload" and an id attribute, like:
+2. Put in your html a div with class "resupload" and an id attribute, like:
 		
 ```
 <div class="resupload" id="my_image"></div>
 ```
 
-	3.- Initialize the plugin after JQuery, like this:
+3. Initialize the plugin after JQuery, like this:
 
 ```
 $('.resupload').resupload();
@@ -56,14 +56,14 @@ $('.resupload').resupload();
 	- lang: an object containing the plugin messages. You can update them with translations, for example. Default: 
 
 ```
-			{
-                'init_error'        : 'Error when initializing plugin',
-                'upload_file_error' : '<i class="fa fa-times-circle"></i> Error when uploading file: ',
-                'network_error'     : '<i class="fa fa-times-circle"></i> Error when connecting to server',
-                'upload_success'    : '<i class="fa fa-check-circle"></i> File uploaded successfully',
-                'upload_processing' : 'Processing file...',
-                'upload_error'      : '<i class="fa fa-times-circle"></i> Error when uploading'
-            }
+{
+    'init_error'        : 'Error when initializing plugin',
+    'upload_file_error' : '<i class="fa fa-times-circle"></i> Error when uploading file: ',
+    'network_error'     : '<i class="fa fa-times-circle"></i> Error when connecting to server',
+    'upload_success'    : '<i class="fa fa-check-circle"></i> File uploaded successfully',
+    'upload_processing' : 'Processing file...',
+    'upload_error'      : '<i class="fa fa-times-circle"></i> Error when uploading'
+}
 ```
 
 	- border_width (px):  default 10
