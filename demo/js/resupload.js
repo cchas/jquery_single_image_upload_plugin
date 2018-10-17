@@ -184,7 +184,7 @@
 
         function clear_message( targetObj ){
 
-            targetObj.closest('span.status')
+            targetObj.find('span.status')
                     .text('')
                     .removeClass('success error danger info warning');
 
