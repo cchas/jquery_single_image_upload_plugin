@@ -17,14 +17,15 @@ This is a very simple plugin that allows to upload an image with preview.
 	2.- Put in your html a div with class "resupload" and an id attribute, like:
 		
 ```
-		<div class="resupload" id="my_image"></div>
+<div class="resupload" id="my_image"></div>
 ```
 
 	3.- Initialize the plugin after JQuery, like this:
 
 ```
-		$('.resupload').resupload();
+$('.resupload').resupload();
 ```
+
 
 # How it works:
 
