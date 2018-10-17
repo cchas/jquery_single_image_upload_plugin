@@ -1,8 +1,8 @@
-# resupload - Simple jQuery based single image upload plugin
+# RESUpload - Simple jQuery based single image upload plugin
 
 This is a very simple plugin that allows to upload an image with preview.
 
-Dependencies:
+# Dependencies:
 - JQuery
 - Font Awesome
 
@@ -10,7 +10,7 @@ Dependencies:
 
 
 
-Quick and dirty initialization:
+# Quick and dirty initialization:
 	
 	1.- Link to the resupload.css in the head of your html, and to the resupload.js file AFTER linking to jquery.
 
@@ -23,7 +23,7 @@ Quick and dirty initialization:
 		$('.resupload').resupload();
 	
 
-How it works:
+# How it works:
 
 - When you initialize the plugin, inside the div.resupload you will have:
 	- some wrappers to help with styling
@@ -40,7 +40,9 @@ How it works:
 - If the uploading fails, a message will be shown.
 
 
-Options / Properties:
+
+
+# Options / Properties:
 	
 	- url_spinner: path to the spinner image. Default: "img/spinner.gif"
 	- url_upload: path to the server upload script. Default: "upload.php"
@@ -57,6 +59,12 @@ Options / Properties:
                 'upload_processing' : 'Processing file...',
                 'upload_error'      : '<i class="fa fa-times-circle"></i> Error when uploading'
             }
+	- border_width (px):  default 10
+    - border_color (hex): default '#000000'
+    - button_color (hex): default '#ff0000'
+
+
+
 
 
 Other notes:

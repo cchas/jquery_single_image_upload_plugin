@@ -235,23 +235,38 @@
                 'upload_processing' : 'Processing file...',
                 'upload_error'      : '<i class="fa fa-times-circle"></i> Error when uploading'
             },
+            border_width: 10,
+            border_color: '#000000',
+            button_color: '#ff0000',
 
             template_html: function( targetObj, settings ){
 
                 var id = targetObj.attr('id'),
-                    src = settings.src;
+                    src = settings.src,
+                    style = '',
+                    style_button = '';
+
+                style = ' style="';
+                style += 'border-width: ' + settings.border_width + 'px;';
+                style += 'border-color: ' + settings.border_color.trim() + ';';
+                style += '" ';
+
+                style_button = ' style="';
+                style_button += 'border-color: ' + settings.button_color.trim() + ';';
+                style_button += 'background-color: ' + settings.button_color.trim() + ';';
+                style_button += '" ';
 
                 return [
 
                     '<div class="' , id , '_wrapper">',
 
-                      '<div class="thumbnail_image vertical-center">',
+                      '<div class="thumbnail_image vertical-center" ', style, '>',
                       
                         '<input type="file" accept="image/*" id="' , id , '" data-filename="" />',
                         '<img src="' , src , '" id="thumbnail_' , id , '" />',
                         
                         '<div class="thumbnail_buttons">',
-                            '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
+                            '<a ', style_button, ' href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
                         '</div>',
 
                         '<span id="' , id , '_message" class="status info">', settings.lang.click_to_upload, '</span>',

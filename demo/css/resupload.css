@@ -37,7 +37,7 @@
     position: absolute;
     width: 100%;
     font-size: 48px;
-    color: #F1F2F7;
+    color: #ccc;
     z-index: 0;
     opacity: 0.5;
     cursor:pointer;
@@ -58,20 +58,20 @@
  }
 
 .thumbnail_image span.success{
-  color: green;
+  color: #155724;
 }
 
 .thumbnail_image span.error,
 .thumbnail_image span.danger{
-  color: red;
+  color: #721c24;
 }
 
 .thumbnail_image span.info{
-  color: blue;
+  color: #0c5460;
 }
 
 .thumbnail_image span.warning{
-  color: orange;
+  color: #856404;
 }
 
 
@@ -96,8 +96,8 @@
  }
 
  .thumbnail_buttons a:hover{
-  background: #fff;
-  color: #00687f;
+  background: #fff !important;
+  color: #222 !important;
  }
  
 .vertical-center {
