@@ -47,7 +47,8 @@
 			echo json_encode(
 				array(
 					'status'  => 'ok',
-					'message' => 'Image uploaded successfully.'
+					'message' => 'Image uploaded successfully.',
+					'filename' => $uploaded_file_name
 				)
 			);
 			exit;

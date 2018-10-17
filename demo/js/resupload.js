@@ -45,8 +45,7 @@
 
         function set_template( targetObj, settings ){
             
-            var src = '',
-                template = '',
+            var template = '',
                 id = targetObj.attr('id') || '';
 
             if( 
@@ -60,10 +59,10 @@
             }
 
             if( settings.url_default_image.length > 4 && settings.url_default_image.indexOf('//') > -1 ){
-                src = settings.url_default_image;
+                settings.src = settings.url_default_image;
             }
 
-            template = settings.template_html( id, src);
+            template = settings.template_html( targetObj, settings );
 
             targetObj.html( template );
 
@@ -146,17 +145,13 @@
         }
 
 
-        
-
         function run_file_upload( targetObj, file, settings ){
 
             var fd         = new FormData(),
+                id         = targetObj.attr('id'),
                 blobFile   = targetObj.find('input[type="file"]').get(0).files[0],
-                filename   = id + '.jpg',
-                id         = settings.id, 
+                filename   = blobFile.name, 
                 field_name = settings.field_name;
-
-            var fsize = blobFile.size;
 
             clear_thumbnail( targetObj );
             update_message( targetObj, 'info', lang.upload_processing );
@@ -192,7 +187,7 @@
 
                     if( obj_json.status == 'ok' || obj_json.status == 'success' ){
 
-                        filename = obj_json.nombre_archivo;    
+                        filename = obj_json.filename;    
                         
                         update_data_filename(targetObj, filename);
                         update_thumbnail( targetObj, file );
@@ -226,13 +221,13 @@
         // INITIALIZATION
         var settings = $.extend({
             id           : '',
-
             url_spinner  : 'img/spinner.gif',
             url_upload   : 'upload.php',
             url_default_image: '',
             field_name : 'upl',
             data: {},
             lang: {
+                'click_to_upload'   : '<i class="fa fa-upload"></i> Click to upload a file',
                 'init_error'        : 'Error when initializing plugin',
                 'upload_file_error' : '<i class="fa fa-times-circle"></i> Error when uploading file: ',
                 'network_error'     : '<i class="fa fa-times-circle"></i> Error when connecting to server',
@@ -241,7 +236,10 @@
                 'upload_error'      : '<i class="fa fa-times-circle"></i> Error when uploading'
             },
 
-            template_html: function(id, src){
+            template_html: function( targetObj, settings ){
+
+                var id = targetObj.attr('id'),
+                    src = settings.src;
 
                 return [
 
@@ -256,7 +254,7 @@
                             '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
                         '</div>',
 
-                        '<span id="' , id , '_message" class="status"></span>',
+                        '<span id="' , id , '_message" class="status info">', settings.lang.click_to_upload, '</span>',
 
                       '</div>',
 
@@ -286,8 +284,7 @@
 
                 e.preventDefault();
 
-                var file = URL.createObjectURL( objInputFile.get(0).files[0] ),
-                      id = settings.id;
+                var file = URL.createObjectURL( objInputFile.get(0).files[0] );
 
                 run_file_upload( targetObj, file, settings );
 
