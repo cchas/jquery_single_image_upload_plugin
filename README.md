@@ -16,15 +16,15 @@ This is a very simple plugin that allows to upload an image with preview.
 
 	2.- Put in your html a div with class "resupload" and an id attribute, like:
 		
-		```
+```
 		<div class="resupload" id="my_image"></div>
-		```
+```
 
 	3.- Initialize the plugin after JQuery, like this:
 
-		```
+```
 		$('.resupload').resupload();
-		```
+```
 
 # How it works:
 
@@ -53,8 +53,8 @@ This is a very simple plugin that allows to upload an image with preview.
 	- field_name: name of the field that the server will recieve. In PHP, you will have it in the $_FILES variable. Default: "upl".
 	- data: an object containing some data you may want to pass by POST to the server. Default: {}
 	- lang: an object containing the plugin messages. You can update them with translations, for example. Default: 
-	
-	```
+
+```
 			{
                 'init_error'        : 'Error when initializing plugin',
                 'upload_file_error' : '<i class="fa fa-times-circle"></i> Error when uploading file: ',
@@ -63,7 +63,7 @@ This is a very simple plugin that allows to upload an image with preview.
                 'upload_processing' : 'Processing file...',
                 'upload_error'      : '<i class="fa fa-times-circle"></i> Error when uploading'
             }
-    ```
+```
 
 	- border_width (px):  default 10
     - border_color (hex): default '#000000'
@@ -78,12 +78,12 @@ This is a very simple plugin that allows to upload an image with preview.
 - The server side code is only for testing purposes. You should develop your own.
 - This server side code must return a json with status = "ok" or "ko". If the status is "ko", an error message must be added, like:
 	
-	```
+```
 	{
 		status: 'ko',
 		error: 'File too big'
 	}
-	```
+```
 
 so this information can be shown.
 - By default, the "upload.php" script uploads images to the "uploads" folder. If you use that folder, make sure you have writting permissions.
