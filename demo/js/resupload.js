@@ -13,7 +13,11 @@
             lang: {
                 'init_error': 'Error when initializing plugin',
                 'upload_file_error' : 'Error when uploading file: ',
-                'network_error' : 'Error when connecting to server'
+                'network_error' : 'Error when connecting to server',
+                'upload_success': 'File uploaded successfully',
+                'upload_processing': 'Processing file...',
+                'upload_error': 'Error when uploading',
+                  
             },
             template_html: function(id, src){
 
@@ -26,9 +30,12 @@
                         '<input type="file" accept="image/*" id="' , id , '" data-filename="" />',
                         '<img src="' , src , '" id="thumbnail_' , id , '" />',
                         
-                        '<div class="botones_thumbnail">',
+                        '<div class="thumbnail_buttons">',
                             '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
                         '</div>',
+
+                        '<span id="' , id , '_message" class="success"></span>',
+
                       '</div>',
 
                     '</div>',
@@ -127,7 +134,7 @@
 
         };
 
-        function poner_cargador( objImg ){
+        function show_spinner( objImg ){
 
             clear_thumbnail( objImg );
 
@@ -145,22 +152,43 @@
 
             var objImg = $('#thumbnail_' + id);
 
-            poner_cargador( objImg );
+            show_spinner( objImg );
 
             window.setTimeout(function(){
 
                 objImg.attr('src', file);
+                update_message( id, 'success', lang.upload_success );
                 
             }, 2000);
 
         } // end update_thumbnail
 
+        function update_message( id, status_class, message ){
+
+            $('#' + id ).closest('div.thumbnail_image')
+                        .find('span')
+                        .removeClass( 'info success danger warning error' )
+                        .addClass( status_class )
+                        .text( message || '...' );
+            
+        }
+
+        function clear_message( targetObj ){
+
+            targetObj.closest('span.status')
+                    .text('')
+                    .removeClass('success')
+                    .removeClass('error');
+
+        }
 
         function clear_thumbnail( targetObj ){
 
             targetObj.attr( 'src', '');
             
             targetObj.closest('div.thumbnail_image').removeClass('error');
+
+            clear_message( targetObj );
 
         }
 
@@ -174,6 +202,7 @@
             var fsize = blobFile.size;
 
             clear_thumbnail( targetObj );
+            update_message( id, 'info', lang.upload_processing );
 
             fd.append(field_name, blobFile, filename );
 
@@ -215,6 +244,8 @@
                         $('#' + id ).closest('div.thumbnail_image')
                                     .addClass('error')
                                     .show();
+
+                        update_message( id, 'error', lang.upload_error );
 
                         console.log( lang.upload_file_error + obj_json.error );
 

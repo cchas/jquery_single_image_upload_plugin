@@ -15,6 +15,7 @@
 .thumbnail_image img{
   max-width: 100%;
   max-height: 300px;
+  background: #fff;
 }
 
 .thumbnail_image input[type="file"]{
@@ -48,9 +49,33 @@
     color: red;
     opacity: 1;
  }
-  
 
-.botones_thumbnail{
+.thumbnail_image span {
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    display: block;
+ }
+
+.thumbnail_image span.success{
+  color: green;
+}
+
+.thumbnail_image span.error,
+.thumbnail_image span.danger{
+  color: red;
+}
+
+.thumbnail_image span.info{
+  color: blue;
+}
+
+.thumbnail_image span.warning{
+  color: orange;
+}
+
+
+.thumbnail_buttons{
   position: absolute;
     right: 5px;
     bottom: 5px;
@@ -58,7 +83,7 @@
 
 }
 
- .botones_thumbnail a{
+ .thumbnail_buttons a{
   display: block;
   float: right;
   font-size: 18px;
@@ -70,7 +95,7 @@
   margin-left: 2px;
  }
 
- .botones_thumbnail a:hover{
+ .thumbnail_buttons a:hover{
   background: #fff;
   color: #00687f;
  }
