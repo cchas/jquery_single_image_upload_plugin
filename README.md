@@ -48,12 +48,12 @@ $('.resupload').resupload();
 
 # Options / Properties:
 	
-	- url_spinner: path to the spinner image. Default: "img/spinner.gif"
-	- url_upload: path to the server upload script. Default: "upload.php"
-	- url_default_image: path to an image shown by default. For example, if you want to update an avatar, the stored avatar will be shown. Default: ""
-	- field_name: name of the field that the server will recieve. In PHP, you will have it in the $_FILES variable. Default: "upl".
-	- data: an object containing some data you may want to pass by POST to the server. Default: {}
-	- lang: an object containing the plugin messages. You can update them with translations, for example. Default: 
+- url_spinner: path to the spinner image. Default: "img/spinner.gif"
+- url_upload: path to the server upload script. Default: "upload.php"
+- url_default_image: path to an image shown by default. For example, if you want to update an avatar, the stored avatar will be shown. Default: ""
+- field_name: name of the field that the server will recieve. In PHP, you will have it in the $_FILES variable. Default: "upl".
+- data: an object containing some data you may want to pass by POST to the server. Default: {}
+- lang: an object containing the plugin messages. You can update them with translations, for example. Default: 
 
 ```
 {
@@ -66,9 +66,9 @@ $('.resupload').resupload();
 }
 ```
 
-	- border_width (px):  default 10
-    - border_color (hex): default '#000000'
-    - button_color (hex): default '#ff0000'
+- border_width (px):  default 10
+- border_color (hex): default '#000000'
+- button_color (hex): default '#ff0000'
 
 
 
