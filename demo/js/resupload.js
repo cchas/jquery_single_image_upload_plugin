@@ -2,96 +2,6 @@
 
     $.fn.resupload = function( options ) {
 
-        var settings = $.extend({
-            id           : '',
-
-            url_spinner  : 'img/spinner.gif',
-            url_upload   : 'upload.php',
-            url_default_image: '',
-            field_name : 'upl',
-            data: {},
-            lang: {
-                'init_error': 'Error when initializing plugin',
-                'upload_file_error' : 'Error when uploading file: ',
-                'network_error' : 'Error when connecting to server',
-                'upload_success': 'File uploaded successfully',
-                'upload_processing': 'Processing file...',
-                'upload_error': 'Error when uploading',
-                  
-            },
-            template_html: function(id, src){
-
-                return [
-
-                    '<div class="' , id , '_wrapper">',
-
-                      '<div class="thumbnail_image vertical-center">',
-                      
-                        '<input type="file" accept="image/*" id="' , id , '" data-filename="" />',
-                        '<img src="' , src , '" id="thumbnail_' , id , '" />',
-                        
-                        '<div class="thumbnail_buttons">',
-                            '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
-                        '</div>',
-
-                        '<span id="' , id , '_message" class="status"></span>',
-
-                      '</div>',
-
-                    '</div>',
-
-                ].join('');
-
-            }
-
-        }, options);
-
-        var esto = this,
-            lang = settings.lang;
-
-        return this.each( function() {
-            
-            var targetObj = $(this);
-
-            set_template( targetObj, settings);
-
-            if( 
-                settings.url_upload == '' || 
-                settings.id == '' 
-            ){
-                
-                targetObj.html( alert_error('init_error') );
-                return false;
-            
-            }
-
-
-            /* evento subida de archivo */
-            var objInputFile = targetObj.find('input[type="file"]');
-
-            objInputFile.change(function(e){ 
-
-                e.preventDefault();
-                  
-                var file = URL.createObjectURL( objInputFile.get(0).files[0] ),
-                      id = settings.id;
-
-                run_file_upload( file, id, settings.field_name );
-
-            });
-
-            var link_clear_image = targetObj.find('a.clear_image');
-            
-            link_clear_image.click(function(e){ 
-                  
-                clear_image( e, targetObj );
-
-            });
-
-            return this;
-
-        });
-
 
         function update_data_filename(targetObj, filename){
 
@@ -131,21 +41,22 @@
 
             targetObj.find('div.thumbnail_image img').attr('src', '');
             
-            update_data_filename(targetObj, '');
-            hide_clear_button(targetObj);
+            update_data_filename( targetObj, '');
+            hide_clear_button( targetObj);
             clear_message( targetObj );
 
         }
 
         function set_template( targetObj, settings ){
             
-            var src = '';
+            var src = '',
+                template = '';
 
             if( settings.url_default_image.length > 4 && settings.url_default_image.indexOf('//') > -1 ){
                 src = settings.url_default_image;
             }
 
-            var template = settings.template_html(settings.id, src);
+            template = settings.template_html(settings.id, src);
 
             targetObj.html( template );
 
@@ -157,13 +68,14 @@
 
         };
 
-        function show_spinner( objImg ){
+        function show_spinner( targetObj ){
 
-            clear_thumbnail( objImg );
+
+            clear_thumbnail( targetObj );
 
             window.setTimeout(function(){
 
-                objImg.attr('src', settings.url_spinner)
+                targetObj.find('img').attr('src', settings.url_spinner)
                         .css('z-index', 3000)
                         .show();
 
@@ -171,31 +83,28 @@
 
         }
 
-        function update_thumbnail( id, file ){
+        function update_thumbnail( targetObj, file ){
 
-            var objImg = $('#thumbnail_' + id);
-
-            show_spinner( objImg );
+            show_spinner( targetObj );
 
             window.setTimeout(function(){
 
-                objImg.attr('src', file);
-                update_message( id, 'success', lang.upload_success );
+                targetObj.find( 'img' ).attr('src', file);
+
+                update_message( targetObj, 'success', lang.upload_success );
                 
-                var targetObj = $('#' + id ).closest('div.thumbnail_image');
-                show_clear_button(targetObj);
+                show_clear_button( targetObj );
 
             }, 2000);
 
         } // end update_thumbnail
 
-        function update_message( id, status_class, message ){
+        function update_message( targetObj, status_class, message ){
 
-            $('#' + id ).closest('div.thumbnail_image')
-                        .find('span.status')
-                        .removeClass( 'info success danger warning error' )
-                        .addClass( status_class )
-                        .text( message || '...' );
+            targetObj.find('span.status')
+                     .removeClass( 'info success danger warning error' )
+                     .addClass( status_class )
+                     .text( message || '...' );
             
         }
 
@@ -209,7 +118,7 @@
 
         function clear_thumbnail( targetObj ){
 
-            targetObj.attr( 'src', '');
+            targetObj.find('div.thumbnail_image img').attr( 'src', '');
             
             targetObj.closest('div.thumbnail_image').removeClass('error');
 
@@ -217,7 +126,38 @@
 
         }
 
-        function process_run_file_upload( id, file, fd ){
+        function show_error_icon( targetObj ){
+
+            targetObj
+                .addClass('error')
+                .show();
+
+        }
+
+        function run_file_upload( targetObj, file, id, field_name ){
+
+            var fd        = new FormData(),
+                blobFile  = targetObj.find('input[type="file"]').get(0).files[0],
+                filename  = id + '.jpg';
+
+            var fsize = blobFile.size;
+
+            clear_thumbnail( targetObj );
+            update_message( targetObj, 'info', lang.upload_processing );
+
+            fd.append(field_name, blobFile, filename );
+
+            $.each( settings.data, function(index, value){
+                
+                fd.append( index, value );
+
+            });
+
+            process_run_file_upload( targetObj, file, fd );
+
+        } // end run_file_upload
+
+        function process_run_file_upload( targetObj, file, fd ){
 
             var resp = $.ajax({
                 url: settings.url_upload,
@@ -240,20 +180,14 @@
 
                         filename = obj_json.nombre_archivo;    
                         
-                        // $('#' + id ).attr('data-filename', filename);
-
-                        var targetObj = $('#thumbnail_' + id );
-                        
                         update_data_filename(targetObj, filename);
-                        update_thumbnail( id, file );
+                        update_thumbnail( targetObj, file );
                         
                     }else{
 
-                        $('#' + id ).closest('div.thumbnail_image')
-                                    .addClass('error')
-                                    .show();
+                        show_error_icon( targetObj );
 
-                        update_message( id, 'error', lang.upload_error + ': ' + obj_json.error );
+                        update_message( targetObj, 'error', lang.upload_error + ': ' + obj_json.error );
                         console.log( lang.upload_file_error + obj_json.error );
 
                     }
@@ -274,30 +208,98 @@
 
         }
 
-        function run_file_upload( file, id, field_name ){
 
-            var fd        = new FormData(),
-                targetObj = $('#thumbnail_' + id ),
-                blobFile  = $('#' + id).get(0).files[0],
-                filename  = id + '.jpg';
+        // INITIALIZATION
+        var settings = $.extend({
+            id           : '',
 
-            var fsize = blobFile.size;
+            url_spinner  : 'img/spinner.gif',
+            url_upload   : 'upload.php',
+            url_default_image: '',
+            field_name : 'upl',
+            data: {},
+            lang: {
+                'init_error'        : 'Error when initializing plugin',
+                'upload_file_error' : 'Error when uploading file: ',
+                'network_error'     : 'Error when connecting to server',
+                'upload_success'    : 'File uploaded successfully',
+                'upload_processing' : 'Processing file...',
+                'upload_error'      : 'Error when uploading'
+            },
 
-            clear_thumbnail( targetObj );
-            update_message( id, 'info', lang.upload_processing );
+            template_html: function(id, src){
 
-            fd.append(field_name, blobFile, filename );
+                return [
 
-            $.each( settings.data, function(index, value){
+                    '<div class="' , id , '_wrapper">',
+
+                      '<div class="thumbnail_image vertical-center">',
+                      
+                        '<input type="file" accept="image/*" id="' , id , '" data-filename="" />',
+                        '<img src="' , src , '" id="thumbnail_' , id , '" />',
+                        
+                        '<div class="thumbnail_buttons">',
+                            '<a href="#" class="clear_image"><i class="fa fa-trash"></i></a>',
+                        '</div>',
+
+                        '<span id="' , id , '_message" class="status"></span>',
+
+                      '</div>',
+
+                    '</div>',
+
+                ].join('');
+
+            }
+
+        }, options);
+
+
+        var lang = settings.lang;
+
+        return this.each( function() {
+            
+            var targetObj = $(this);
+
+            set_template( targetObj, settings);
+
+            if( 
+                settings.url_upload == '' || 
+                settings.id == '' 
+            ){
                 
-                fd.append( index, value );
+                targetObj.html( alert_error('init_error') );
+                return false;
+            
+            }
+
+            var objInputFile = targetObj.find('input[type="file"]');
+
+            objInputFile.change(function(e){ 
+
+                e.preventDefault();
+                  
+                var file = URL.createObjectURL( objInputFile.get(0).files[0] ),
+                      id = settings.id;
+
+                run_file_upload( targetObj, file, id, settings.field_name );
 
             });
 
-            process_run_file_upload( id, file, fd );
+            var link_clear_image = targetObj.find('a.clear_image');
+            
+            link_clear_image.click(function(e){ 
+                  
+                clear_image( e, targetObj );
 
-        } // end run_file_upload
+            });
 
+            return this;
+
+        });
+
+
+        
 
     } // end plugin
 

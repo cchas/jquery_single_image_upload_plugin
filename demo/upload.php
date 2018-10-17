@@ -4,7 +4,8 @@
 		
 		** WARNING **
 
-	  	THIS IS ONLY AN EXAMPLE SCRIPT. THE SECURITY IS VERY LOW. USE YOUR OWN SCRIPT.
+	  	THIS IS ONLY AN EXAMPLE SCRIPT. THE SECURITY IS VERY LOW. 
+	  	USE YOUR OWN !!!!!
 
 	**********************************************************************************/
 
@@ -18,7 +19,7 @@
 	$uploaded_file_temp_name = $_FILES[ $field_name ]['tmp_name'];
 	$uploaded_file_size      = $_FILES[ $field_name ]['size'];
 
-	
+
 	if( 
 		isset($_FILES[ $field_name ]) && 
 		$_FILES[ $field_name ]['error'] == 0
